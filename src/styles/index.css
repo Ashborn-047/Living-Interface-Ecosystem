@@ -226,9 +226,10 @@ body {
 /* Origins Section */
 .origins-box {
     background: transparent;
-    border: none;
-    padding: 0;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    padding: 2rem;
     box-shadow: none;
+    border-radius: 0;
 }
 
 .origins-title {
