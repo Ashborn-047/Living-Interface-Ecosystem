@@ -72,7 +72,6 @@ export const Artifact: React.FC<ArtifactProps> = ({ stage, mousePos }) => {
     const renderContent = (): React.ReactNode => {
         switch (stage) {
             case 'hero':
-                // No artifact in hero - let typography shine
                 return null;
 
             case 'origins':
@@ -194,7 +193,7 @@ export const Artifact: React.FC<ArtifactProps> = ({ stage, mousePos }) => {
 
     const getContainerClass = (): string => {
         const classes: Record<StageType, string> = {
-            hero: 'artifact-container--hero',
+            hero: 'artifact-container--hero animate-heartbeat',
             origins: 'artifact-container--origins',
             feedback: 'artifact-container--feedback',
             intent: 'artifact-container--intent',
@@ -210,6 +209,9 @@ export const Artifact: React.FC<ArtifactProps> = ({ stage, mousePos }) => {
         if (stage === 'environment') {
             return { width: '250vmax', height: '250vmax' };
         }
+        if (stage === 'hero') {
+            return { width: '26rem', height: '26rem' };
+        }
         if (stage === 'probabilistic') {
             return { width: '20rem', height: '20rem' };
         }
@@ -223,6 +225,18 @@ export const Artifact: React.FC<ArtifactProps> = ({ stage, mousePos }) => {
 
     return (
         <div className={`artifact ${getPositionClass()}`}>
+            {/* SVG FILTERS FOR LIQUID CORE */}
+            <svg style={{ position: 'absolute', width: 0, height: 0 }}>
+                <defs>
+                    <filter id="liquid-core">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" seed="1">
+                            <animate attributeName="baseFrequency" dur="30s" values="0.015;0.025;0.015" repeatCount="indefinite" />
+                        </feTurbulence>
+                        <feDisplacementMap in="SourceGraphic" scale="40" />
+                        <feGaussianBlur stdDeviation="2" />
+                    </filter>
+                </defs>
+            </svg>
             <div
                 className={`artifact__inner ${getContainerClass()}`}
                 onMouseMove={stage === 'feedback' ? handleElasticMove : undefined}

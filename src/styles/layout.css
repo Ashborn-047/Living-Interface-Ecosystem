@@ -52,13 +52,28 @@
     text-align: left;
 }
 
+/* Glass Card Variant */
+.glass-container {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.section-content-left,
+.section-content-right {
+    z-index: 20;
+}
+
 /* Mobile Stacking */
 @media (max-width: 1024px) {
 
     .section-content-left,
     .section-content-right {
-        width: 100%;
-        margin: 0;
+        width: calc(100% - 4rem);
+        margin: 2rem;
         padding: 4rem 2rem;
         text-align: center;
         align-items: center;
