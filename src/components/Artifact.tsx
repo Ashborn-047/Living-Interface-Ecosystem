@@ -235,6 +235,17 @@ export const Artifact: React.FC<ArtifactProps> = ({ stage, mousePos }) => {
                         <feDisplacementMap in="SourceGraphic" scale="40" />
                         <feGaussianBlur stdDeviation="2" />
                     </filter>
+
+                    <filter id="purple-surge">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" seed="2">
+                            <animate attributeName="baseFrequency" dur="30s" values="0.015;0.025;0.015" repeatCount="indefinite" />
+                        </feTurbulence>
+                        <feDisplacementMap in="SourceGraphic" scale="50" result="shifted" />
+                        <feMorphology operator="dilate" radius="4" in="shifted" result="expanded" />
+                        <feGaussianBlur stdDeviation="15" in="expanded" result="blurred" />
+                        <feFlood floodColor="#a855f7" floodOpacity="0.8" result="purple" />
+                        <feComposite in="purple" in2="blurred" operator="in" />
+                    </filter>
                 </defs>
             </svg>
             <div

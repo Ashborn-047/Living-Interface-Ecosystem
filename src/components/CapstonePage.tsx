@@ -100,6 +100,8 @@ export default function CapstonePage() {
                         <div className="hero-vital-heart">
                             <div className="heart-core animate-heartbeat"></div>
                             <div className="heart-aura animate-heartbeat"></div>
+                            {/* SINGLE ORGANIC PULSE (Peak Triggered) */}
+                            <div className="hero-organic-pulse animate-purple-pulse"></div>
                             <div className="artifact-core--liquid hero-core-fill"></div>
                         </div>
 
