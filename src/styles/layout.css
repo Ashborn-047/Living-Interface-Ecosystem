@@ -1,0 +1,78 @@
+/* ============================================
+   LAYOUT.CSS (Spine / Split Screen Strategy)
+   ============================================ */
+
+.section-container {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    z-index: 10;
+}
+
+/* 
+   CONTENT ZONES (Symmetrical Spine Layout)
+   - Left Zone: Ends near center, text aligns Right (towards center)
+   - Right Zone: Starts near center, text aligns Left (towards center)
+   - Gap: 10% central gutter
+*/
+
+/* Centered (Hero/Footer) */
+.section-content-centered {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Left Zone - Content is on the Left, aligns towards Center */
+.section-content-left {
+    width: 40%;
+    margin-left: 8%;
+    padding: 2rem 3rem 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+}
+
+/* Right Zone - Content is on the Right, aligns towards Center */
+.section-content-right {
+    width: 40%;
+    margin-left: 52%;
+    padding: 2rem 2rem 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+/* Mobile Stacking */
+@media (max-width: 1024px) {
+
+    .section-content-left,
+    .section-content-right {
+        width: 100%;
+        margin: 0;
+        padding: 4rem 2rem;
+        text-align: center;
+        align-items: center;
+    }
+}
+
+.text-highlight {
+    font-weight: 400;
+    color: inherit;
+    letter-spacing: 0.01em;
+}
+
+/* Smooth reveal for all sections */
+.section-container {
+    opacity: 1;
+    transition: opacity 0.6s ease-out;
+}

@@ -1,0 +1,339 @@
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+/* Existing drifts */
+@keyframes drift-slow {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(10px, -15px);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes pulse-slow {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+}
+
+/* 
+   NEW INTERACTIVITY ANIMATIONS 
+*/
+
+/* Intent: Swipe Hint */
+@keyframes swipe-hint {
+  0% {
+    transform: translateX(-5px);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: translateX(10px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(15px);
+    opacity: 0;
+  }
+}
+
+.animate-swipe {
+  animation: swipe-hint 1.5s infinite ease-in-out;
+}
+
+/* Fluidity: Slow Spin */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+/* Probabilistic: Searching Pulse */
+@keyframes pulse-search {
+  0% {
+    box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.7);
+  }
+
+  70% {
+    box-shadow: 0 0 0 15px rgba(248, 113, 113, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(248, 113, 113, 0);
+  }
+}
+
+.animate-search {
+  animation: pulse-search 2s infinite;
+}
+
+/* Generic Entry Effects */
+@keyframes slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes dissolve-box {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    border-radius: 4px;
+  }
+
+  50% {
+    opacity: 0.5;
+    border-radius: 50%;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+/* ============================================
+   ICU MONITOR PULSE (Fluidity Section)
+   Heartbeat-style animation for Activity icon
+   ============================================ */
+@keyframes icu-pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  10% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+
+  20% {
+    opacity: 0.8;
+    transform: scale(0.95);
+  }
+
+  30% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+
+  40% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+}
+
+.animate-icu {
+  animation: icu-pulse 1.5s ease-in-out infinite;
+}
+
+/* ============================================
+   NEON BREATH (Probabilistic Section)
+   Glowing box-shadow breathing effect
+   ============================================ */
+@keyframes neon-breath {
+
+  0%,
+  100% {
+    box-shadow:
+      0 0 20px rgba(99, 102, 241, 0.3),
+      0 0 40px rgba(99, 102, 241, 0.1),
+      inset 0 0 30px rgba(99, 102, 241, 0.05);
+  }
+
+  50% {
+    box-shadow:
+      0 0 40px rgba(99, 102, 241, 0.5),
+      0 0 80px rgba(99, 102, 241, 0.3),
+      0 0 120px rgba(248, 113, 113, 0.1),
+      inset 0 0 40px rgba(99, 102, 241, 0.1);
+  }
+}
+
+.animate-neon {
+  animation: neon-breath 3s ease-in-out infinite;
+}
+
+/* ============================================
+   CURSOR BLINK (Origins Terminal)
+   ============================================ */
+@keyframes cursor-blink {
+
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.cursor-blink {
+  animation: cursor-blink 1s step-end infinite;
+  color: #10b981;
+}
+
+/* ============================================
+   BLOB FLOAT (Fluidity)
+   ============================================ */
+@keyframes blob-float-1 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(20px, -15px) scale(1.1);
+  }
+
+  50% {
+    transform: translate(-10px, 10px) scale(0.95);
+  }
+
+  75% {
+    transform: translate(15px, 5px) scale(1.05);
+  }
+}
+
+@keyframes blob-float-2 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(-15px, 10px) scale(1.05);
+  }
+
+  50% {
+    transform: translate(20px, -20px) scale(1.1);
+  }
+
+  75% {
+    transform: translate(-5px, -10px) scale(0.95);
+  }
+}
+
+@keyframes blob-float-3 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(10px, 15px) scale(1.08);
+  }
+
+  66% {
+    transform: translate(-15px, -10px) scale(0.92);
+  }
+}
+
+/* ============================================
+   LOADING DOTS (Fluidity)
+   ============================================ */
+@keyframes loading-dots {
+
+  0%,
+  20% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+/* ============================================
+   RING PULSE (Probabilistic)
+   ============================================ */
+@keyframes ring-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes ring-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   ORB GLOW (Hero)
+   ============================================ */
+@keyframes orb-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 60px rgba(96, 165, 250, 0.4), 0 0 120px rgba(59, 130, 246, 0.2);
+  }
+
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 80px rgba(96, 165, 250, 0.6), 0 0 160px rgba(59, 130, 246, 0.3);
+  }
+}
