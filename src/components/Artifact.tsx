@@ -206,8 +206,8 @@ export const Artifact: React.FC<ArtifactProps> = ({ stage, mousePos }) => {
     };
 
     const getSize = () => {
-        if (stage === 'environment') {
-            return { width: '250vmax', height: '250vmax' };
+        if (stage === 'environment' || stage === 'footer') {
+            return { width: '200vmax', height: '200vmax' };
         }
         if (stage === 'hero') {
             return { width: '26rem', height: '26rem' };
@@ -224,12 +224,14 @@ export const Artifact: React.FC<ArtifactProps> = ({ stage, mousePos }) => {
     const y = (mousePos.y - window.innerHeight / 2) * 0.02;
 
     return (
-        <div className={`artifact ${getPositionClass()}`}>
+        <div className={`artifact ${getPositionClass()}`} style={{
+            zIndex: (stage === 'environment' || stage === 'footer') ? 5 : 50
+        }}>
             {/* SVG FILTERS FOR LIQUID CORE */}
             <svg style={{ position: 'absolute', width: 0, height: 0 }}>
                 <defs>
                     <filter id="liquid-core">
-                        <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" seed="1">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="1" seed="1">
                             <animate attributeName="baseFrequency" dur="30s" values="0.015;0.025;0.015" repeatCount="indefinite" />
                         </feTurbulence>
                         <feDisplacementMap in="SourceGraphic" scale="40" />
@@ -237,7 +239,7 @@ export const Artifact: React.FC<ArtifactProps> = ({ stage, mousePos }) => {
                     </filter>
 
                     <filter id="purple-surge">
-                        <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" seed="2">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="1" seed="2">
                             <animate attributeName="baseFrequency" dur="30s" values="0.015;0.025;0.015" repeatCount="indefinite" />
                         </feTurbulence>
                         <feDisplacementMap in="SourceGraphic" scale="50" result="shifted" />
@@ -255,6 +257,8 @@ export const Artifact: React.FC<ArtifactProps> = ({ stage, mousePos }) => {
                 style={{
                     width: size.width,
                     height: size.height,
+                    opacity: stage === 'hero' ? 0 : 1,
+                    pointerEvents: stage === 'hero' ? 'none' : 'auto',
                     ...((stage === 'feedback') ? elasticStyle : {
                         transform: shouldApply3D
                             ? `perspective(1000px) rotateX(${y * 0.5}deg) rotateY(${x * 0.5}deg)`
@@ -262,10 +266,20 @@ export const Artifact: React.FC<ArtifactProps> = ({ stage, mousePos }) => {
                     }),
                     transition: (stage === 'feedback')
                         ? (elasticStyle as React.CSSProperties).transition || 'all 1.2s'
-                        : 'all 1.5s cubic-bezier(0.25, 1, 0.5, 1)'
+                        : 'all 1.2s cubic-bezier(0.25, 1, 0.5, 1)'
                 }}
             >
-                {renderContent()}
+                <div className="artifact__content-wrap" style={{
+                    opacity: 1,
+                    transition: 'opacity 0.6s ease-in-out',
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    {renderContent()}
+                </div>
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Artifact } from './Artifact';
 import { BackgroundEngine } from './BackgroundEngine';
 import type { StageType } from './Artifact';
@@ -35,7 +35,7 @@ interface SectionProps {
 
 const Section: React.FC<SectionProps> = ({ id, children, className = "" }) => {
     return (
-        <section id={id} className={`section-container ${className}`}>
+        <section id={id} className={`section ${className}`}>
             {children}
         </section>
     );
@@ -45,24 +45,61 @@ export default function CapstonePage() {
     const [activeStage, setActiveStage] = useState<StageType>('hero');
     const mousePos = useMousePosition();
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        setActiveStage(entry.target.id as StageType);
-                    }
-                });
-            },
-            { threshold: 0.5, rootMargin: "-10% 0px -10% 0px" }
-        );
+    const ratios = useRef<Record<string, number>>({});
 
-        document.querySelectorAll('section').forEach((section) => {
-            observer.observe(section);
+    useEffect(() => {
+        const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+            entries.forEach((entry) => {
+                ratios.current[(entry.target as HTMLElement).id] = entry.intersectionRatio;
+            });
+
+            // Find the section with the HIGHEST visibility
+            let dominantId: StageType = activeStage;
+            let maxScore = 0;
+
+            (Object.entries(ratios.current) as [string, number][]).forEach(([id, ratio]) => {
+                // Priority sections get 15x weight to trigger background morph early
+                const weight = ['environment', 'footer'].includes(id) ? 15 : 1;
+                const hysteresis = (id === activeStage) ? 1.2 : 1.0;
+                const score = ratio * weight * hysteresis;
+
+                if (score > maxScore) {
+                    maxScore = score;
+                    dominantId = id as StageType;
+                }
+            });
+
+            // Only change if the new section has meaningful visibility
+            if (dominantId !== activeStage && (maxScore > 0.05)) {
+                setActiveStage(dominantId);
+            }
+        };
+
+        // Main observer for most sections - tight focal point
+        const focalObserver = new IntersectionObserver(handleIntersection, {
+            threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+            rootMargin: "-40% 0px -40% 0px"
         });
 
-        return () => observer.disconnect();
-    }, []);
+        // VERY early observer for climax - trigger as soon as section approaches
+        const earlyObserver = new IntersectionObserver(handleIntersection, {
+            threshold: [0, 0.05, 0.1, 0.15, 0.2],
+            rootMargin: "100px 0px 100px 0px" // Detect 100px BEFORE entering viewport
+        });
+
+        document.querySelectorAll('section').forEach((section) => {
+            if (['environment', 'footer'].includes(section.id)) {
+                earlyObserver.observe(section);
+            } else {
+                focalObserver.observe(section);
+            }
+        });
+
+        return () => {
+            focalObserver.disconnect();
+            earlyObserver.disconnect();
+        };
+    }, [activeStage]);
 
     const getBgStyle = (): string => {
         const styles: Record<StageType, string> = {
@@ -112,13 +149,24 @@ export default function CapstonePage() {
                                 <span className="kinetic-word stagger-3">ECOSYSTEM</span>
                             </h1>
                             <div className="hero-divider stagger-3"></div>
-                            <div className="hero-description-group stagger-4">
-                                <p className="hero-tagline">THE INTERFACE IS NO LONGER WAITING. IT IS RESPONDING.</p>
-                                <p className="hero-subtext">FROM STATIC INSTRUMENT TO AUTONOMOUS HABITAT.</p>
+                            <div className="hero-description-group">
+                                <p className="hero-tagline">Living Interface Ecosystem</p>
+                                <p className="text-muted text-sm opacity-50 tracking-widest mt-2 uppercase">
+                                    Adaptive • Non-Blocking • Intent-Driven
+                                </p>
                             </div>
+                        </div>
+
+                        {/* Scroll Prompt */}
+                        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-40">
+                            <span className="text-[10px] tracking-[0.5em] uppercase">Begin Descent</span>
+                            <div className="w-[1px] h-12 bg-gradient-to-b from-white to-transparent"></div>
                         </div>
                     </div>
                 </Section>
+
+                {/* THE ASCENT SPACER */}
+                <div className="phase-spacer"></div>
 
                 {/* 2. ORIGINS (Text LEFT 50%) - Artifact will float RIGHT */}
                 <Section id="origins">
@@ -139,6 +187,8 @@ export default function CapstonePage() {
                     </div>
                 </Section>
 
+                <div className="phase-spacer"></div>
+
                 {/* 3. FEEDBACK (Text RIGHT 50%) - Artifact will float LEFT */}
                 <Section id="feedback">
                     <div className="section-content-right">
@@ -155,6 +205,8 @@ export default function CapstonePage() {
                         </div>
                     </div>
                 </Section>
+
+                <div className="phase-spacer"></div>
 
                 {/* 4. INTENT (Text LEFT 50%) - Artifact float RIGHT */}
                 <Section id="intent">
@@ -173,6 +225,8 @@ export default function CapstonePage() {
                     </div>
                 </Section>
 
+                <div className="phase-spacer"></div>
+
                 {/* 5. FLUIDITY (Text RIGHT 50%) - Artifact float LEFT */}
                 <Section id="non-blocking">
                     <div className="section-content-right">
@@ -189,6 +243,8 @@ export default function CapstonePage() {
                         </div>
                     </div>
                 </Section>
+
+                <div className="phase-spacer"></div>
 
                 {/* 6. PROBABILISTIC (Text LEFT 50%) - Artifact float RIGHT */}
                 <Section id="probabilistic">
@@ -209,33 +265,38 @@ export default function CapstonePage() {
                     </div>
                 </Section>
 
+                <div className="phase-spacer" style={{ height: '30vh' }}></div>
+
                 {/* 7. ENVIRONMENT (Centered Content) - Artifact is Fullscreen Background */}
-                <Section id="environment" className="pb-32">
+                <Section id="environment">
                     <div className="section-content-centered">
                         <div className="env-content" style={{ position: 'relative', zIndex: 10 }}>
-                            <h3>Phase 06</h3>
-                            <h2 className="env-title">Environment</h2>
-                            <p className="env-highlight text-highlight">From static tools to lived-in spaces.</p>
+                            <h4 className="env-label text-muted uppercase text-xs opacity-70">Phase 06</h4>
+                            <h1 className="env-title">Environment</h1>
+                            <h2 className="env-highlight">From static tools to lived-in spaces.</h2>
                             <div className="env-card glass-container">
                                 <p className="env-text">
                                     The modern interface breathes. It has gravity. It simulates presence.
-                                    <br /><br />
+                                </p>
+                                <div className="env-cta-wrap">
                                     <span className="env-cta">
                                         The web is no longer something we look at. <br />
                                         It is something we walk through.
                                     </span>
-                                </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </Section>
+
+                {/* THE DESCENT SPACER */}
+                <div className="phase-spacer" style={{ height: '40vh' }}></div>
 
                 {/* 8. FOOTER (Centered) */}
                 <Section id="footer">
                     <div className="section-content-centered">
                         <footer className="glass-container footer-overhaul">
                             <div className="footer-top">
-                                <h2 className="footer-logo">Ashborn</h2>
                                 <p className="footer-tagline">Living Interface Ecosystem</p>
                             </div>
 
@@ -255,9 +316,7 @@ export default function CapstonePage() {
                             </div>
 
                             <div className="footer-links">
-                                <a href="https://github.com/Ashborn-047/Living-Interface-Ecosystem" className="footer-link">GitHub</a>
-                                <a href="#" className="footer-link">Documentation</a>
-                                <a href="#" className="footer-link">Process</a>
+                                <a href="https://github.com/Ashborn-047/Living-Interface-Ecosystem" className="footer-link" target="_blank" rel="noopener noreferrer">GitHub</a>
                             </div>
 
                             <div className="footer-bottom">

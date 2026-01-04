@@ -2,14 +2,42 @@
    LAYOUT.CSS (Spine / Split Screen Strategy)
    ============================================ */
 
-.section-container {
-    min-height: 100vh;
+.section {
+    min-height: 125vh;
     width: 100%;
     position: relative;
     display: flex;
     align-items: center;
-    padding: 0;
+    padding: 15vh 0;
     z-index: 10;
+}
+
+/* Hero Centering Exception */
+#hero.section {
+    min-height: 100vh;
+    padding-top: 0;
+    overflow: hidden;
+    /* Prevent massive text from pushing page layout */
+}
+
+/* 
+   THE PHASE SPACER (Rhythmic Breathing Room)
+   Consistent vertical distance between content blocks
+*/
+.phase-spacer {
+    height: 50vh;
+    width: 100%;
+}
+
+/* 
+   THE DESCENT (End of Journey Buffer)
+   Space between Environment and Footer to stabilize artifacts
+*/
+/* Footer Vertical Dominance */
+#footer.section {
+    min-height: 80vh;
+    padding: 20vh 0;
+    align-items: flex-start;
 }
 
 /* 
@@ -87,7 +115,7 @@
 }
 
 /* Smooth reveal for all sections */
-.section-container {
+.section {
     opacity: 1;
     transition: opacity 0.6s ease-out;
 }

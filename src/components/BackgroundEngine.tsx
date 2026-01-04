@@ -26,6 +26,16 @@ export const BackgroundEngine: React.FC<BackgroundEngineProps> = ({ stage, mouse
                     { color: '#2563eb', top: '50%', left: '10%', size: '45vw' },
                     { color: '#1e3a8a', bottom: '10%', right: '60%', size: '30vw' }
                 ];
+            case 'environment':
+                return [
+                    { color: '#10b981', top: '20%', left: '30%', size: '50vw' },
+                    { color: '#064e3b', bottom: '20%', right: '20%', size: '45vw' }
+                ];
+            case 'footer':
+                return [
+                    { color: '#1e293b', top: '40%', left: '40%', size: '40vw' },
+                    { color: '#0f172a', bottom: '10%', right: '10%', size: '50vw' }
+                ];
             default:
                 return [
                     { color: '#1e1e2e', top: '30%', left: '30%', size: '50vw' },
